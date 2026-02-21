@@ -1,0 +1,11 @@
+{
+  "domain": "checkpoint_gaia_gem",
+  "name": "Check Point Gaia Monitor Gem",
+  "documentation": "https://github.com/yourusername/checkpoint_gaia_gem",
+  "dependencies": [],
+  "codeowners": ["@yourusername"],
+  "requirements": ["aiohttp"],
+  "iot_class": "local_polling",
+  "version": "1.0.0",
+  "config_flow": true
+}
