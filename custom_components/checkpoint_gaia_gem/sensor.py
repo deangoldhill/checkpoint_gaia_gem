@@ -4,20 +4,22 @@ import aiohttp
 
 from homeassistant.components.sensor import SensorEntity
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, CoordinatorEntity
-from homeassistant.const import PERCENTAGE
+from homeassistant.const import PERCENTAGE, CONF_HOST, CONF_USERNAME, CONF_PASSWORD, CONF_PORT
 
-from .const import DOMAIN, CONF_HOST, CONF_PORT, CONF_USERNAME, CONF_PASSWORD
 from .api import CheckpointGaiaAPI
 
 _LOGGER = logging.getLogger(__name__)
+DOMAIN = "checkpoint_gaia_gem"
 SCAN_INTERVAL = timedelta(seconds=60)
 
-async def async_setup_entry(hass, config_entry, async_add_entities):
-    """Set up the sensors from a config entry."""
-    host = config_entry.data[CONF_HOST]
-    port = config_entry.data[CONF_PORT]
-    username = config_entry.data[CONF_USERNAME]
-    password = config_entry.data[CONF_PASSWORD]
+async def async_setup_entry(hass, entry, async_add_entities):
+    """Set up the Check Point sensors from a config entry."""
+    # Read configuration from the UI setup
+    config = entry.data
+    host = config.get(CONF_HOST)
+    port = config.get(CONF_PORT, 443)
+    username = config.get(CONF_USERNAME)
+    password = config.get(CONF_PASSWORD)
 
     api = CheckpointGaiaAPI(host, port, username, password)
 
@@ -35,7 +37,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
     coordinator = DataUpdateCoordinator(
         hass,
         _LOGGER,
-        name=f"checkpoint_gaia_gem_{host}",
+        name=DOMAIN,
         update_method=async_update_data,
         update_interval=SCAN_INTERVAL,
     )
@@ -51,22 +53,6 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         CheckpointSensor(coordinator, "Blade Content Version", "blade_versions", None, "mdi:shield-check"),
     ]
 
-    async_add_entities(sensors)
+    async_add_entities(sensors, True)
 
-class CheckpointSensor(CoordinatorEntity, SensorEntity):
-    def __init__(self, coordinator, name, key, unit, icon):
-        super().__init__(coordinator)
-        self._name = name
-        self._key = key
-        self._attr_native_unit_of_measurement = unit
-        self._attr_icon = icon
-        # Create a unique ID so users can customize the sensor in the UI
-        self._attr_unique_id = f"{coordinator.name}_{key}"
-
-    @property
-    def name(self):
-        return f"Check Point {self._name}"
-
-    @property
-    def native_value(self):
-        return self.coordinator.data.get(self._key)
+# ... (Keep your existing CheckpointSensor class here) ...
