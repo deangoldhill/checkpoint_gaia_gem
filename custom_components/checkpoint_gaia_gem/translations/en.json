@@ -1,0 +1,21 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Connect to Check Point Firewall",
+        "description": "Enter your Gaia API credentials.",
+        "data": {
+          "host": "IP Address or Hostname",
+          "port": "Port (usually 443)",
+          "username": "API Username",
+          "password": "API Password"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Failed to connect to the firewall.",
+      "invalid_auth": "Invalid username or password.",
+      "unknown": "An unknown error occurred."
+    }
+  }
+}
