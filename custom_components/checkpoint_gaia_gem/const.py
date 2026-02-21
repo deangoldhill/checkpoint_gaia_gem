@@ -1,0 +1,5 @@
+DOMAIN = "checkpoint_gaia_gem"
+CONF_HOST = "host"
+CONF_PORT = "port"
+CONF_USERNAME = "username"
+CONF_PASSWORD = "password"
